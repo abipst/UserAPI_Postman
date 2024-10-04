@@ -1,0 +1,1002 @@
+{
+	"info": {
+		"_postman_id": "febefa9c-8671-45b0-97df-da613250b942",
+		"name": "User_Api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37214289"
+	},
+	"item": [
+		{
+			"name": "Bootcamp",
+			"item": [
+				{
+					"name": "Add new user with only Mandatory fields- Positive",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Content-Type is application/json for \"+pm.variables.get('scenario'), function () {",
+									"    pm.request.to.have.header(\"Content-Type\", \"application/json\");",
+									"});",
+									"",
+									"pm.test(\"Authorization is present for \"+pm.variables.get('scenario'), function () {",
+									"    pm.expect(pm.request).to.have.header('Authorization');",
+									"});",
+									"",
+									"//Get the response as JSON",
+									"const response = pm.response.json();",
+									"// Parse the request body",
+									"const requestBody = JSON.parse(pm.request.body.raw);",
+									"",
+									"// Response structure validation",
+									"pm.test(\"Validate response structure for \"+pm.variables.get('scenario'), function () {",
+									"    pm.expect(response).to.have.property(\"userAddress\");",
+									"    pm.expect(response).to.have.property(\"user_id\");",
+									"    pm.expect(response).to.have.property(\"user_first_name\");",
+									"    pm.expect(response).to.have.property(\"user_last_name\");",
+									"    pm.expect(response).to.have.property(\"user_contact_number\");",
+									"    pm.expect(response).to.have.property(\"user_email_id\");",
+									"    pm.expect(response).to.have.property(\"creation_time\");",
+									"    pm.expect(response).to.have.property(\"last_mod_time\");",
+									"",
+									"    // Validate the nested userAddress object",
+									"    pm.expect(response.userAddress).to.have.property(\"addressId\");",
+									"    pm.expect(response.userAddress).to.have.property(\"plotNumber\");",
+									"    pm.expect(response.userAddress).to.have.property(\"street\");",
+									"    pm.expect(response.userAddress).to.have.property(\"state\");",
+									"    pm.expect(response.userAddress).to.have.property(\"country\");",
+									"    pm.expect(response.userAddress).to.have.property(\"zipCode\");",
+									"});",
+									"",
+									"// Data type validation",
+									"pm.test(\"Validate response data types for \"+pm.variables.get('scenario'), function () {",
+									"    pm.expect(response.user_id).to.be.a(\"number\");",
+									"    pm.expect(response.user_first_name).to.be.a(\"string\");",
+									"    pm.expect(response.user_last_name).to.be.a(\"string\");",
+									"    pm.expect(response.user_contact_number).to.be.a(\"number\");",
+									"    pm.expect(response.user_email_id).to.be.a(\"string\");",
+									"    pm.expect(response.creation_time).to.be.a(\"string\");",
+									"    pm.expect(response.last_mod_time).to.be.a(\"string\");",
+									"    pm.expect(response.userAddress.addressId).to.be.a(\"number\");",
+									"});",
+									"",
+									"// Data validation",
+									"pm.test(\"Compare and validate data between request and response for \"+pm.variables.get('scenario'), function () {",
+									"    // Validate user information",
+									"    pm.expect(response.user_first_name).to.eql(requestBody.user_first_name);",
+									"    pm.expect(response.user_last_name).to.eql(requestBody.user_last_name);",
+									"    pm.expect(response.user_contact_number.toString()).to.eql(requestBody.user_contact_number);",
+									"    pm.expect(response.user_email_id).to.eql(requestBody.user_email_id);",
+									"    pm.expect(response.userAddress.plotNumber).to.eql(null);",
+									"    pm.expect(response.userAddress.street).to.eql(null);",
+									"    pm.expect(response.userAddress.state).to.eql(null);",
+									"    pm.expect(response.userAddress.country).to.eql(null);",
+									"    pm.expect(response.userAddress.zipCode).to.eql(null);",
+									"});",
+									"",
+									"// storing user_id and user_first_name to use in other requests",
+									"    pm.collectionVariables.set(\"user_id\", response.user_id);",
+									"    console.log(pm.collectionVariables.get(\"user_id\"));",
+									"    pm.collectionVariables.set(\"user_first_name\", response.user_first_name);",
+									"    console.log(pm.collectionVariables.get(\"user_first_name\"));",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let requestBodyObj = pm.variables.get('requestBody');",
+									"",
+									"pm.request.headers.add({ key: \"Content-Type\", value: \"application/json\" });",
+									"pm.request.body.update({",
+									"      mode: 'raw',",
+									"      raw: JSON.stringify(requestBodyObj)  // Send requestBody as JSON string",
+									"    });"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{requestBodyObj}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}{{Endpoint}}",
+							"host": [
+								"{{baseUrl}}{{Endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add new user with all fields - Positive",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Content-Type is application/json for \"+pm.variables.get('scenario'), function () {",
+									"    pm.request.to.have.header(\"Content-Type\", \"application/json\");",
+									"});",
+									"",
+									"pm.test(\"Authorization is present for \"+pm.variables.get('scenario'), function () {",
+									"    pm.expect(pm.request).to.have.header('Authorization');",
+									"});",
+									"",
+									"//Get the response as JSON",
+									"const response = pm.response.json();",
+									"",
+									"// Response structure validation",
+									"pm.test(\"Validate response structure for \"+pm.variables.get('scenario'), function () {",
+									"    pm.expect(response).to.have.property(\"userAddress\");",
+									"    pm.expect(response).to.have.property(\"user_id\");",
+									"    pm.expect(response).to.have.property(\"user_first_name\");",
+									"    pm.expect(response).to.have.property(\"user_last_name\");",
+									"    pm.expect(response).to.have.property(\"user_contact_number\");",
+									"    pm.expect(response).to.have.property(\"user_email_id\");",
+									"    pm.expect(response).to.have.property(\"creation_time\");",
+									"    pm.expect(response).to.have.property(\"last_mod_time\");",
+									"",
+									"    // Validate the nested userAddress object",
+									"    pm.expect(response.userAddress).to.have.property(\"addressId\");",
+									"    pm.expect(response.userAddress).to.have.property(\"plotNumber\");",
+									"    pm.expect(response.userAddress).to.have.property(\"street\");",
+									"    pm.expect(response.userAddress).to.have.property(\"state\");",
+									"    pm.expect(response.userAddress).to.have.property(\"country\");",
+									"    pm.expect(response.userAddress).to.have.property(\"zipCode\");",
+									"});",
+									"",
+									"// Data type validation",
+									"pm.test(\"Validate response data types for \"+pm.variables.get('scenario'), function () {",
+									"    pm.expect(response.user_id).to.be.a(\"number\");",
+									"    pm.expect(response.user_first_name).to.be.a(\"string\");",
+									"    pm.expect(response.user_last_name).to.be.a(\"string\");",
+									"    pm.expect(response.user_contact_number).to.be.a(\"number\");",
+									"    pm.expect(response.user_email_id).to.be.a(\"string\");",
+									"    pm.expect(response.creation_time).to.be.a(\"string\");",
+									"    pm.expect(response.last_mod_time).to.be.a(\"string\");",
+									"",
+									"    // Validate userAddress object data types",
+									"    pm.expect(response.userAddress.addressId).to.be.a(\"number\");",
+									"    pm.expect(response.userAddress.plotNumber).to.be.a(\"string\");",
+									"    pm.expect(response.userAddress.street).to.be.a(\"string\");",
+									"    pm.expect(response.userAddress.state).to.be.a(\"string\");",
+									"    pm.expect(response.userAddress.country).to.be.a(\"string\");",
+									"    pm.expect(response.userAddress.zipCode).to.be.a(\"number\");",
+									"});",
+									"",
+									"// Parse the request body",
+									"const requestBody = JSON.parse(pm.request.body.raw);",
+									"",
+									"// Data validation",
+									"pm.test(\"Compare and validate data between request and response for \"+pm.variables.get('scenario'), function () {",
+									"    // Validate user information",
+									"    pm.expect(response.user_first_name).to.eql(requestBody.user_first_name);",
+									"    pm.expect(response.user_last_name).to.eql(requestBody.user_last_name);",
+									"    pm.expect(response.user_contact_number.toString()).to.eql(requestBody.user_contact_number);",
+									"    pm.expect(response.user_email_id).to.eql(requestBody.user_email_id);",
+									"    ",
+									"    // Validate user address",
+									"    pm.expect(response.userAddress.plotNumber).to.eql(requestBody.userAddress.plotNumber);",
+									"    pm.expect(response.userAddress.street).to.eql(requestBody.userAddress.street);",
+									"    pm.expect(response.userAddress.state).to.eql(requestBody.userAddress.state);",
+									"    pm.expect(response.userAddress.country).to.eql(requestBody.userAddress.country);",
+									"    pm.expect(response.userAddress.zipCode.toString()).to.eql(requestBody.userAddress.zipCode);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let requestBodyObj = pm.variables.get('requestBody');",
+									"",
+									"pm.request.headers.add({ key: \"Content-Type\", value: \"application/json\" });",
+									"pm.request.body.update({",
+									"      mode: 'raw',",
+									"      raw: JSON.stringify(requestBodyObj)  // Send requestBody as JSON string",
+									"    });"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{password}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{username}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{requestBodyObj}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}{{Endpoint}}",
+							"host": [
+								"{{baseUrl}}{{Endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add new user - Negative",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"if((pm.variables.get('scenario')) === \"POST - content type text\"){",
+									"    pm.test(\"Content-Type is application/json for\"+pm.variables.get('scenario'), function () {",
+									"    pm.request.to.have.header(\"Content-Type\", \"text/plain\");",
+									"});",
+									"}else{",
+									"    pm.test(\"Content-Type is application/json for \"+pm.variables.get('scenario'), function () {",
+									"    pm.request.to.have.header(\"Content-Type\", \"application/json\");",
+									"});",
+									"}",
+									"if((pm.variables.get('scenario')) === \"POST - no auth\"){",
+									"    pm.test(\"Authorization header is absent \"+pm.variables.get('scenario'), function () {",
+									"    pm.expect(pm.request).not.to.have.header('Authorization'); ",
+									"});",
+									"}else{",
+									"    pm.test(\"Authorization is present for \"+pm.variables.get('scenario'), function () {",
+									"    pm.expect(pm.request).to.have.header('Authorization');    ",
+									"});",
+									"}",
+									"//Get the response JSON",
+									"var jsonresponse = pm.response.json();",
+									"",
+									"if((pm.response.code === 400) || (pm.response.code === 409)){",
+									"    pm.test(\"Response message check for \"+pm.variables.get('scenario'), function () {",
+									"        pm.expect(jsonresponse.message).to.eql(pm.variables.get('message'));",
+									"    });",
+									"} else if((pm.response.code === 404) || (pm.response.code === 415) || (pm.response.code === 405)){",
+									"    pm.test(\"Response error message check for \"+pm.variables.get('scenario'), function () {",
+									"        pm.expect(jsonresponse.error).to.eql(pm.variables.get('statusText'));",
+									"    });",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let requestBodyObj = pm.variables.get('requestBody');",
+									"",
+									"if((pm.variables.get('scenario')) != \"POST - no auth\"){",
+									"    console.log(\"hello\");",
+									"    // Set your username and password",
+									"    const username = pm.collectionVariables.get(\"username\");",
+									"    const password = pm.collectionVariables.get(\"password\");;",
+									"    // Encode the username and password in Base64",
+									"    const encodedCredentials = Buffer.from(`${username}:${password}`).toString('base64');",
+									"",
+									"    // Set the Authorization header",
+									"    pm.request.headers.add({",
+									"    key: 'Authorization',",
+									"    value: `Basic ${encodedCredentials}`",
+									"});",
+									"}",
+									"if((pm.variables.get('scenario')) === \"POST - invalid method GET\"){",
+									"    pm.request.method = 'GET';",
+									"}",
+									"if((pm.variables.get('scenario')) === \"POST - content type text\"){",
+									"    pm.request.body.update(JSON.stringify(requestBodyObj));",
+									"}else{",
+									"    pm.request.headers.add({ key: \"Content-Type\", value: \"application/json\" });",
+									"    pm.request.body.update({",
+									"      mode: 'raw',",
+									"      raw: JSON.stringify(requestBodyObj)  // Send requestBody as JSON string",
+									"    });",
+									"",
+									"}",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{requestBodyObj}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}{{Endpoint}}",
+							"host": [
+								"{{baseUrl}}{{Endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if((pm.variables.get('scenario')) != \"GET All - no auth\"){",
+									"    pm.test(\"Authorization is present for \"+pm.variables.get('scenario'), function () {",
+									"    pm.expect(pm.request).to.have.header('Authorization');",
+									"});",
+									"}",
+									"//Get the response as JSON",
+									"const jsonresponse = pm.response.json();",
+									"",
+									"if((pm.response.code === 401) || (pm.response.code === 404) || (pm.response.code === 405)){",
+									"    pm.test(\"Response error message check for \"+pm.variables.get('scenario'), function () {",
+									"        pm.expect(jsonresponse.error).to.eql(pm.variables.get('statusText'));",
+									"    });",
+									"}else if(pm.response.code === 200){",
+									"// Check if the response is an array",
+									"pm.test(\"Response is an array\", function () {",
+									"    pm.expect(Array.isArray(jsonresponse)).to.be.true;",
+									"});",
+									"",
+									"/* Loop through each user object in the array",
+									"pm.response.json().forEach(function (user) {",
+									"",
+									"    // Check all fields exist",
+									"    pm.test(\"All fields are present\", function () {",
+									"        pm.expect(user).to.have.property(\"user_id\");",
+									"        pm.expect(user).to.have.property(\"user_first_name\");",
+									"        pm.expect(user).to.have.property(\"user_last_name\");",
+									"        pm.expect(user).to.have.property(\"user_contact_number\");",
+									"        pm.expect(user).to.have.property(\"user_email_id\");",
+									"        pm.expect(user).to.have.property(\"creation_time\");",
+									"        pm.expect(user).to.have.property(\"last_mod_time\");",
+									"        pm.expect(user).to.have.property(\"userAddress\");",
+									"        pm.expect(user.userAddress).to.have.property(\"addressId\");",
+									"        pm.expect(user.userAddress).to.have.property(\"plotNumber\");",
+									"        pm.expect(user.userAddress).to.have.property(\"street\");",
+									"        pm.expect(user.userAddress).to.have.property(\"state\");",
+									"        pm.expect(user.userAddress).to.have.property(\"country\");",
+									"        pm.expect(user.userAddress).to.have.property(\"zipCode\");",
+									"    });",
+									"",
+									"    // Validate data types of all fields",
+									"    pm.test(\"Data types are valid\", function () {",
+									"        pm.expect(user.user_id).to.be.a(\"number\");",
+									"        pm.expect(user.user_first_name).to.be.a(\"string\");",
+									"        pm.expect(user.user_last_name).to.be.a(\"string\");",
+									"        pm.expect(user.user_contact_number).to.be.a(\"number\");",
+									"        pm.expect(user.user_email_id).to.be.a(\"string\");",
+									"        pm.expect(user.creation_time).to.be.a(\"string\");",
+									"        pm.expect(user.last_mod_time).to.be.a(\"string\");",
+									"        pm.expect(user.userAddress.addressId).to.be.a(\"number\");",
+									"        pm.expect(user.userAddress.zipCode).to.satisfy((value) => value === null || typeof value === \"number\");",
+									"        pm.expect(user.userAddress.plotNumber).to.satisfy((value) => value === null || typeof value === \"string\");",
+									"        pm.expect(user.userAddress.street).to.satisfy((value) => value === null || typeof value === \"string\");",
+									"        pm.expect(user.userAddress.state).to.satisfy((value) => value === null || typeof value === \"string\");",
+									"        pm.expect(user.userAddress.country).to.satisfy((value) => value === null || typeof value === \"string\");",
+									"",
+									"    });",
+									"",
+									"});  */",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"if((pm.variables.get('scenario')) != \"GET All - no auth\"){",
+									"    // Set your username and password",
+									"    const username = pm.collectionVariables.get(\"username\");",
+									"    const password = pm.collectionVariables.get(\"password\");;",
+									"    // Encode the username and password in Base64",
+									"    const encodedCredentials = Buffer.from(`${username}:${password}`).toString('base64');",
+									"",
+									"    // Set the Authorization header",
+									"    pm.request.headers.add({",
+									"    key: 'Authorization',",
+									"    value: `Basic ${encodedCredentials}`",
+									"});",
+									"}",
+									"if((pm.variables.get('scenario')) === \"GET All - invalid method POST\"){",
+									"    pm.request.method = 'POST';",
+									"}else if((pm.variables.get('scenario')) === \"GET All - invalid method PUT\"){",
+									"    pm.request.method = 'PUT';",
+									"}if((pm.variables.get('scenario')) === \"GET All - invalid method DELETE\"){",
+									"    pm.request.method = 'DELETE';",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}{{Endpoint}}",
+							"host": [
+								"{{baseUrl}}{{Endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user by userID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if((pm.variables.get('scenario')) != \"GET by ID - no auth\"){",
+									"    pm.test(\"Authorization is present for \"+pm.variables.get('scenario'), function () {",
+									"    pm.expect(pm.request).to.have.header('Authorization');",
+									"});",
+									"}",
+									"",
+									"//Get the response as JSON",
+									"const jsonResponse = pm.response.json();",
+									"",
+									"if ((pm.response.code === 401) || (pm.response.code === 404) || (pm.response.code === 405)) {",
+									"    pm.test(\"Response error message check for \" + pm.variables.get('scenario'), function () {",
+									"        pm.expect(jsonResponse.error).to.eql(pm.variables.get('statusText'));",
+									"    });",
+									"} else if (pm.response.code === 200) {",
+									"    // Check if the response is an object",
+									"    pm.test(\"Response is an object\", function () {",
+									"        pm.expect(jsonResponse).to.be.an('object');",
+									"    });",
+									"",
+									"    // Check all fields exist",
+									"    pm.test(\"All fields are present\", function () {",
+									"        pm.expect(jsonResponse).to.have.property(\"user_id\");",
+									"        pm.expect(jsonResponse).to.have.property(\"user_first_name\");",
+									"        pm.expect(jsonResponse).to.have.property(\"user_last_name\");",
+									"        pm.expect(jsonResponse).to.have.property(\"user_contact_number\");",
+									"        pm.expect(jsonResponse).to.have.property(\"user_email_id\");",
+									"        pm.expect(jsonResponse).to.have.property(\"creation_time\");",
+									"        pm.expect(jsonResponse).to.have.property(\"last_mod_time\");",
+									"        pm.expect(jsonResponse).to.have.property(\"userAddress\");",
+									"        pm.expect(jsonResponse.userAddress).to.have.property(\"addressId\");",
+									"        pm.expect(jsonResponse.userAddress).to.have.property(\"plotNumber\");",
+									"        pm.expect(jsonResponse.userAddress).to.have.property(\"street\");",
+									"        pm.expect(jsonResponse.userAddress).to.have.property(\"state\");",
+									"        pm.expect(jsonResponse.userAddress).to.have.property(\"country\");",
+									"        pm.expect(jsonResponse.userAddress).to.have.property(\"zipCode\");",
+									"    });",
+									"",
+									"    // Validate data types of all fields",
+									"    pm.test(\"Data types are valid\", function () {",
+									"        pm.expect(jsonResponse.user_id).to.be.a(\"number\");",
+									"        pm.expect(jsonResponse.user_id).to.be.eql(pm.collectionVariables.get(\"user_id\"));",
+									"        pm.expect(jsonResponse.user_first_name).to.be.a(\"string\");",
+									"        pm.expect(jsonResponse.user_last_name).to.be.a(\"string\");",
+									"        pm.expect(jsonResponse.user_contact_number).to.be.a(\"number\");",
+									"        pm.expect(jsonResponse.user_email_id).to.be.a(\"string\");",
+									"        pm.expect(jsonResponse.creation_time).to.be.a(\"string\");",
+									"        pm.expect(jsonResponse.last_mod_time).to.be.a(\"string\");",
+									"        pm.expect(jsonResponse.userAddress.addressId).to.be.a(\"number\");",
+									"        pm.expect(jsonResponse.userAddress.zipCode).to.satisfy((value) => value === null || typeof value === \"number\");",
+									"        pm.expect(jsonResponse.userAddress.plotNumber).to.satisfy((value) => value === null || typeof value === \"string\");",
+									"        pm.expect(jsonResponse.userAddress.street).to.satisfy((value) => value === null || typeof value === \"string\");",
+									"        pm.expect(jsonResponse.userAddress.state).to.satisfy((value) => value === null || typeof value === \"string\");",
+									"        pm.expect(jsonResponse.userAddress.country).to.satisfy((value) => value === null || typeof value === \"string\");",
+									"    });",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"if((pm.variables.get('scenario')) != \"GET by ID - no auth\"){",
+									"    // Set your username and password",
+									"    const username = pm.collectionVariables.get(\"username\");",
+									"    const password = pm.collectionVariables.get(\"password\");;",
+									"    // Encode the username and password in Base64",
+									"    const encodedCredentials = Buffer.from(`${username}:${password}`).toString('base64');",
+									"",
+									"    // Set the Authorization header",
+									"    pm.request.headers.add({",
+									"    key: 'Authorization',",
+									"    value: `Basic ${encodedCredentials}`",
+									"});",
+									"}",
+									"if((pm.variables.get('scenario')) === \"GET by ID - invalid method POST\"){",
+									"    pm.request.method = 'POST';",
+									"}else if((pm.variables.get('scenario')) === \"GET by ID - invalid method PUT\"){",
+									"    pm.request.method = 'PUT';",
+									"}if((pm.variables.get('scenario')) === \"GET by ID - invalid method DELETE\"){",
+									"    pm.request.method = 'DELETE';",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}{{Endpoint}}",
+							"host": [
+								"{{baseUrl}}{{Endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user by firstname",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if((pm.variables.get('scenario')) != \"GET by firstname - no auth\"){",
+									"    pm.test(\"Authorization is present for \"+pm.variables.get('scenario'), function () {",
+									"    pm.expect(pm.request).to.have.header('Authorization');",
+									"});",
+									"}",
+									"",
+									"//Get the response as JSON",
+									"const jsonResponse = pm.response.json();",
+									"",
+									"if ((pm.response.code === 401) || (pm.response.code === 404) || (pm.response.code === 405)) {",
+									"    pm.test(\"Response error message check for \" + pm.variables.get('scenario'), function () {",
+									"        pm.expect(jsonResponse.error).to.eql(pm.variables.get('statusText'));",
+									"    });",
+									"} else if (pm.response.code === 200) {",
+									"// Check if the response is an array",
+									"pm.test(\"Response is an array\", function () {",
+									"    pm.expect(Array.isArray(jsonResponse)).to.be.true;",
+									"});",
+									"",
+									"// Loop through each user object in the array",
+									"pm.response.json().forEach(function (user) {",
+									"",
+									"    // Check all fields exist",
+									"    pm.test(\"All fields are present\", function () {",
+									"        pm.expect(user).to.have.property(\"user_id\");",
+									"        pm.expect(user).to.have.property(\"user_first_name\");",
+									"        pm.expect(user).to.have.property(\"user_last_name\");",
+									"        pm.expect(user).to.have.property(\"user_contact_number\");",
+									"        pm.expect(user).to.have.property(\"user_email_id\");",
+									"        pm.expect(user).to.have.property(\"creation_time\");",
+									"        pm.expect(user).to.have.property(\"last_mod_time\");",
+									"        pm.expect(user).to.have.property(\"userAddress\");",
+									"        pm.expect(user.userAddress).to.have.property(\"addressId\");",
+									"        pm.expect(user.userAddress).to.have.property(\"plotNumber\");",
+									"        pm.expect(user.userAddress).to.have.property(\"street\");",
+									"        pm.expect(user.userAddress).to.have.property(\"state\");",
+									"        pm.expect(user.userAddress).to.have.property(\"country\");",
+									"        pm.expect(user.userAddress).to.have.property(\"zipCode\");",
+									"    });",
+									"",
+									"    // Validate data types of all fields",
+									"    pm.test(\"Data types are valid\", function () {",
+									"        pm.expect(user.user_id).to.be.a(\"number\");",
+									"        pm.expect(user.user_first_name).to.be.a(\"string\");",
+									"        pm.expect(user.user_last_name).to.be.a(\"string\");",
+									"        pm.expect(user.user_contact_number).to.be.a(\"number\");",
+									"        pm.expect(user.user_email_id).to.be.a(\"string\");",
+									"        pm.expect(user.creation_time).to.be.a(\"string\");",
+									"        pm.expect(user.last_mod_time).to.be.a(\"string\");",
+									"        pm.expect(user.userAddress.addressId).to.be.a(\"number\");",
+									"        pm.expect(user.userAddress.zipCode).to.satisfy((value) => value === null || typeof value === \"number\");",
+									"        pm.expect(user.userAddress.plotNumber).to.satisfy((value) => value === null || typeof value === \"string\");",
+									"        pm.expect(user.userAddress.street).to.satisfy((value) => value === null || typeof value === \"string\");",
+									"        pm.expect(user.userAddress.state).to.satisfy((value) => value === null || typeof value === \"string\");",
+									"        pm.expect(user.userAddress.country).to.satisfy((value) => value === null || typeof value === \"string\");",
+									"",
+									"    });",
+									"",
+									"});  ",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"if((pm.variables.get('scenario')) != \"GET by firstname - no auth\"){",
+									"    // Set your username and password",
+									"    const username = pm.collectionVariables.get(\"username\");",
+									"    const password = pm.collectionVariables.get(\"password\");;",
+									"    // Encode the username and password in Base64",
+									"    const encodedCredentials = Buffer.from(`${username}:${password}`).toString('base64');",
+									"",
+									"    // Set the Authorization header",
+									"    pm.request.headers.add({",
+									"    key: 'Authorization',",
+									"    value: `Basic ${encodedCredentials}`",
+									"});",
+									"}",
+									"if((pm.variables.get('scenario')) === \"GET by firstname - invalid method POST\"){",
+									"    pm.request.method = 'POST';",
+									"}else if((pm.variables.get('scenario')) === \"GET by firstname - invalid method PUT\"){",
+									"    pm.request.method = 'PUT';",
+									"}if((pm.variables.get('scenario')) === \"GET by firstname - invalid method DELETE\"){",
+									"    pm.request.method = 'DELETE';",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}{{Endpoint}}",
+							"host": [
+								"{{baseUrl}}{{Endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Content-Type is application/json for \"+pm.variables.get('scenario'), function () {",
+									"    pm.request.to.have.header(\"Content-Type\", \"application/json\");",
+									"});",
+									"",
+									"pm.test(\"Content-Type is application/json for \"+pm.variables.get('scenario'),function () {",
+									"    pm.response.to.have.header(\"Content-Type\", \"application/json\");",
+									"});",
+									"",
+									"pm.test(\"Authorization is present for \"+pm.variables.get('scenario'), function () {",
+									"    pm.expect(pm.request).to.have.header('Authorization');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let requestBodyObj = pm.variables.get('requestBody');",
+									"",
+									"pm.request.headers.add({ key: \"Content-Type\", value: \"application/json\" });",
+									"pm.request.body.update({",
+									"      mode: 'raw',",
+									"      raw: JSON.stringify(requestBodyObj)  // Send requestBody as JSON string",
+									"    });"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "userapi@nn",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "Numpy@gmail.com",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{requestBodyObj}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}{{Endpoint}}",
+							"host": [
+								"{{baseUrl}}{{Endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete by userID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Authorization is present for \"+pm.variables.get('scenario'), function () {",
+									"    pm.expect(pm.request).to.have.header('Authorization');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "userapi@nn",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "Numpy@gmail.com",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}{{Endpoint}}",
+							"host": [
+								"{{baseUrl}}{{Endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete user by firstname",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Authorization is present for \"+pm.variables.get('scenario'), function () {",
+									"    pm.expect(pm.request).to.have.header('Authorization');",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "userapi@nn",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "Numpy@gmail.com",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}{{Endpoint}}",
+							"host": [
+								"{{baseUrl}}{{Endpoint}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"// Load data from file",
+					"if (typeof pm.variables.get('requestsData') !== 'object') {",
+					"    pm.variables.set('requestsData', pm.iterationData.toObject());",
+					"}",
+					"const requestsData = pm.variables.get('requestsData');",
+					"",
+					"if (typeof requestsData !== 'object' || Object.keys(requestsData).length === 0) {",
+					"    console.log('No external data provided or object is empty.');",
+					"    return;",
+					"}",
+					"",
+					"// Find the current request",
+					"const currentRequest = requestsData.requests.filter(({name}) => name === pm.info.requestName)[0];",
+					"",
+					"// Skip the rest since we have no data",
+					"if (!currentRequest) {",
+					"    console.log(`Request ${pm.info.requestName} has no data defined.`);",
+					"    return;",
+					"}",
+					"",
+					"// Expose variables",
+					"const variables = currentRequest.data.shift();",
+					"",
+					"for (const [key,value] of Object.entries(variables)) {",
+					"    pm.variables.set(key, value);",
+					"}",
+					"",
+					"pm.variables.set('requestsData', requestsData);",
+					"",
+					"// Decide where to go next",
+					"if (currentRequest.data.length > 0) {",
+					"    pm.execution.setNextRequest(pm.info.requestName);",
+					"}"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"pm.test(\"Response status code check for \" +pm.variables.get('scenario'), function () {",
+					"    pm.expect(pm.response.code).to.eql(pm.variables.get('statusCode'));",
+					"});",
+					"",
+					"pm.test(\"Response status text check for \"+pm.variables.get('scenario'), function () {",
+					"    pm.expect(pm.response.status).to.eql(pm.variables.get('statusText'));",
+					"});",
+					"",
+					"pm.test(\"Content-Type header is present for \"+pm.variables.get('scenario'), function () {",
+					"    pm.response.to.have.header(\"Content-Type\");",
+					"});",
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://userserviceapp-f5a54828541b.herokuapp.com/uap"
+		},
+		{
+			"key": "username",
+			"value": "Numpy@gmail.com"
+		},
+		{
+			"key": "password",
+			"value": "userapi@nn"
+		},
+		{
+			"key": "user_id",
+			"value": ""
+		},
+		{
+			"key": "user_first_name",
+			"value": ""
+		},
+		{
+			"key": "requestBodyObj",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
